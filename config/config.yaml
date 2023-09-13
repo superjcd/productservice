@@ -1,0 +1,20 @@
+# grpc config
+grpc:
+  host: ""
+  port: ":9090"
+  name: "product-grpc"
+
+# http config
+http:
+  host: ""
+  port: ":8080"
+  name: "product-http"
+
+pg:
+  host: 127.0.0.1
+  username: postgres
+  password: postgres
+  database: postgres
+  max-idle-connections: 20
+  max-open-connections": 10
+  max-connection-life-time-seconds: 600

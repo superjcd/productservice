@@ -1,0 +1,177 @@
+syntax = "proto3";
+
+package proto.v1;
+
+
+option go_package =  "github.com/HooYa-Bigdata/productservice/genproto/v1";
+
+
+service ProductService {
+    rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse){};
+    rpc ListProduct(ListProductRequest) returns (ListProductResponse){};
+    rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse){};
+    rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse){};
+    
+    rpc GetAmzProductLatestInfo(GetAmzProductLatestInfoRequest) returns (GetAmzProductLatestInfoResponse){};
+    rpc AppendAmzProductActiveDetail(AppendAmzProductActiveDetailRequest) returns (AppendAmzProductActiveDetailResponse){};
+    rpc AppendAmzProductInactiveDetail(AppendAmzProductInactiveDetailRequest) returns (AppendAmzProductInactiveDetailResponse){};
+    
+
+    // TODO: 获取历史记录
+
+}
+
+enum Status {
+    success = 0;
+    failure = 1;
+}
+
+// 产品基础信息
+message Product {
+    string sku = 1;
+    string shop = 2;
+    string asin = 3;
+    string country= 4;
+}
+
+
+message AmzProductInactivateDetail{
+    string asin=1;
+    string country=2;
+    string title=3;
+    string bullet_points=4; 
+    string create_date=5;
+}
+
+message AmzProductActiveDetail { 
+    string asin =1;
+    string country=2; 
+    string price = 3; 
+    string coupon = 4;
+    string currency=5;
+    string star=6;
+    uint32 ratings=7;
+    string image=8;
+    string parent_asin=9;
+    string category_info = 10;  
+    string top_category_name=11;
+    uint32 top_category_rank=12;
+    string color=13;
+    string weight=14;
+    string weight_unit=15;
+    string dimensions=16;
+    string dimensions_unit=17;
+    string create_date=18;
+}
+
+
+message CreateProductRequest {
+    string sku = 1;
+    string shop = 2;
+    string asin = 3;
+    string country= 4;
+}
+
+message CreateProductResponse {
+    string msg=1;
+    Status status =2;
+}
+
+
+message ListProductRequest {
+    int32 offset=1;
+    int32 limit=2;    
+    string shop=3;
+}
+
+message ListProductResponse {
+    string msg=1;
+    Status status =2;
+    repeated Product products=3;
+}
+
+message UpdateProductRequest {
+    string sku = 1;
+    string shop = 2;
+    string asin = 3;
+    string country= 4;
+}
+
+message UpdateProductResponse {
+    string msg=1;
+    Status status =2;
+}
+
+message DeleteProductRequest {
+    string sku=1;
+    string asin=2;
+}
+
+message DeleteProductResponse {
+    string msg=1;
+    Status status =2;
+}
+
+message GetAmzProductLatestInfoRequest {
+    string asin = 1;
+    string country=2;
+}
+
+
+message GetAmzProductLatestInfoResponse {
+    string msg=1;
+    Status status =2;
+    AmzProductInactivateDetail amz_product_incative_details = 3;
+    AmzProductActiveDetail amz_product_ative_details=4;
+}
+
+enum Field {
+    price =0;
+    star = 1;
+    ratings=2;
+    category_rank=3; 
+    top_category_rank=4; 
+}
+
+message GetAmzProductHistoryInfoRequest {
+    string asin = 1;
+    string country=2;
+    string field=3;
+    string start_date=4;
+    string end_date=5;
+}
+
+
+message AmzProductHistoryInfoResponse {
+    repeated string datetimes=1;
+    repeated string values=2;
+
+}
+
+message GetAmzProductHistoryInfoResponse {
+    string msg=1;
+    Status status =2;
+    AmzProductHistoryInfoResponse data=3;
+}
+
+message AppendAmzProductInactiveDetailRequest  {
+    string asin=1;
+    string country=2;
+    string title=3;
+    string bullet_points=4; 
+}
+
+message AppendAmzProductInactiveDetailResponse {
+    string msg=1;
+    Status status =2;   
+}
+
+message AppendAmzProductActiveDetailRequest  {
+    AmzProductActiveDetail details=1;
+}
+
+message AppendAmzProductActiveDetailResponse {
+    string msg=1;
+    Status status =2;   
+}
+
