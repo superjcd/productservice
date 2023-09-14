@@ -45,6 +45,7 @@ func (p *product_details) AppendActiveDetail(ctx context.Context, rq *v1.AppendA
 		Country:         rq.Details.Country,
 		Price:           rq.Details.Price,
 		Currency:        rq.Details.Currency,
+		Coupon:          rq.Details.Coupon,
 		Star:            rq.Details.Star,
 		Ratings:         rq.Details.Ratings,
 		Image:           rq.Details.Image,

@@ -53,6 +53,7 @@ type AmzProdutActiveDetail struct {
 	Country         string `json:"country" gorm:"column:country;index:idx_product_details,priority:2"`
 	Price           string `json:"price" gorm:"column:price"`
 	Currency        string `json:"currency" gorm:"column:currency"`
+	Coupon          string `json:"coupon" gorm:"column:coupon"`
 	Star            string `json:"star" gorm:"column:star"`
 	Ratings         uint32 `json:"ratings" gorm:"column:ratings"`
 	Image           string `json:"image" gorm:"column:image"`

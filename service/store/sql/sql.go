@@ -27,7 +27,7 @@ var (
 
 func NewSqlStoreFactory(db *gorm.DB) (store.Factory, error) {
 	if db == nil && sqlFactory == nil {
-		return nil, fmt.Errorf("failed to get pg store fatory")
+		return nil, fmt.Errorf("failed to get sql store fatory")
 	}
 	once.Do(func() {
 		store.MigrateDatabase(db)
