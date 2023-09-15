@@ -159,6 +159,7 @@ message AppendAmzProductInactiveDetailRequest  {
     string country=2;
     string title=3;
     string bullet_points=4; 
+    string create_date=5;
 }
 
 message AppendAmzProductInactiveDetailResponse {

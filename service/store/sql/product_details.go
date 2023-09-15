@@ -58,6 +58,7 @@ func (p *product_details) AppendActiveDetail(ctx context.Context, rq *v1.AppendA
 		WeightUnit:      rq.Details.WeightUnit,
 		Dimensions:      rq.Details.Dimensions,
 		DimensionsUnit:  rq.Details.DimensionsUnit,
+		CreateDate:      rq.Details.CreateDate,
 	}
 
 	return p.db.Create(&active_info).Error
@@ -69,6 +70,7 @@ func (p *product_details) AppendInactiveDetail(ctx context.Context, rq *v1.Appen
 		Country:      rq.Country,
 		Title:        rq.Title,
 		BulletPoints: rq.BulletPoints,
+		CreateDate:   rq.CreateDate,
 	}
 
 	return p.db.Create(&inactive_info).Error
