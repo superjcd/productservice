@@ -14,7 +14,9 @@ service ProductService {
     
     rpc GetAmzProductLatestInfo(GetAmzProductLatestInfoRequest) returns (GetAmzProductLatestInfoResponse){};
     rpc AppendAmzProductActiveDetail(AppendAmzProductActiveDetailRequest) returns (AppendAmzProductActiveDetailResponse){};
+    rpc DeleteAmzProductActiveDetail(DeleteAmzProductActiveDetailRequest) returns (DeleteAmzProductActiveDetailResponse){};   
     rpc AppendAmzProductInactiveDetail(AppendAmzProductInactiveDetailRequest) returns (AppendAmzProductInactiveDetailResponse){};
+    rpc DeleteAmzProductInactiveDetail(DeleteAmzProductInactiveDetailRequest) returns (DeleteAmzProductInactiveDetailResponse){};
     
 
     // TODO: 获取历史记录
@@ -176,3 +178,20 @@ message AppendAmzProductActiveDetailResponse {
     Status status =2;   
 }
 
+message DeleteAmzProductActiveDetailRequest {
+    string min_create_date=1;
+}
+
+message DeleteAmzProductActiveDetailResponse {
+    string msg=1;
+    Status status =2;
+}
+
+message DeleteAmzProductInactiveDetailRequest {
+    string min_create_date=1;
+}
+
+message DeleteAmzProductInactiveDetailResponse {
+    string msg=1;
+    Status status =2;
+}

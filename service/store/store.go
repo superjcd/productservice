@@ -21,7 +21,8 @@ type ProductStore interface {
 
 type ProductDetailsStore interface {
 	GetlatestInfo(ctx context.Context, _ *v1.GetAmzProductLatestInfoRequest) (*ProductLatestInfo, error)
-	// GetHistoryInfo(ctx context.Context, _ *v1.GetAmzProductHistoryInfoRequest) (*ProductLatestInfo, error)
 	AppendActiveDetail(ctx context.Context, _ *v1.AppendAmzProductActiveDetailRequest) error
+	DeleteActiveDetail(ctx context.Context, _ *v1.DeleteAmzProductActiveDetailRequest) error
 	AppendInactiveDetail(ctx context.Context, _ *v1.AppendAmzProductInactiveDetailRequest) error
+	DeleteInactiveDetail(ctx context.Context, _ *v1.DeleteAmzProductInactiveDetailRequest) error
 }

@@ -168,6 +168,22 @@ func (suite *FakeStoreTestSuite) TestAppendeDetail() {
 
 }
 
+func (suite *FakeStoreTestSuite) TestZDeleteActiveDetail() {
+	rq := &v1.DeleteAmzProductActiveDetailRequest{
+		MinCreateDate: "2023-10-01",
+	}
+	err := suite.FakeFactory.ProductDetails().DeleteActiveDetail(context.Background(), rq)
+	assert.Nil(suite.T(), err)
+}
+
+func (suite *FakeStoreTestSuite) TestZDeleteInactiveDetail() {
+	rq := &v1.DeleteAmzProductInactiveDetailRequest{
+		MinCreateDate: "2023-10-01",
+	}
+	err := suite.FakeFactory.ProductDetails().DeleteInactiveDetail(context.Background(), rq)
+	assert.Nil(suite.T(), err)
+}
+
 func TestFakeStoreSuite(t *testing.T) {
 	suite.Run(t, new(FakeStoreTestSuite))
 }

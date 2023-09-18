@@ -2,6 +2,7 @@ package sql
 
 import (
 	"context"
+	"fmt"
 
 	v1 "github.com/HooYa-Bigdata/productservice/genproto/v1"
 	"github.com/HooYa-Bigdata/productservice/service/store"
@@ -74,4 +75,19 @@ func (p *product_details) AppendInactiveDetail(ctx context.Context, rq *v1.Appen
 	}
 
 	return p.db.Create(&inactive_info).Error
+}
+
+func (p *product_details) DeleteActiveDetail(ctx context.Context, rq *v1.DeleteAmzProductActiveDetailRequest) error {
+	if rq.MinCreateDate != "" {
+		return p.db.Where("create_date < ?", rq.MinCreateDate).Delete(&store.AmzProdutActiveDetail{}).Error
+	}
+
+	return fmt.Errorf("min_create_date不能为空")
+}
+
+func (p *product_details) DeleteInactiveDetail(ctx context.Context, rq *v1.DeleteAmzProductInactiveDetailRequest) error {
+	if rq.MinCreateDate != "" {
+		return p.db.Where("create_date < ?", rq.MinCreateDate).Delete(&store.AmzProdutInactiveDetail{}).Error
+	}
+	return fmt.Errorf("min_create_date不能为空")
 }

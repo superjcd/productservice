@@ -25,7 +25,9 @@ const (
 	ProductService_DeleteProduct_FullMethodName                  = "/proto.v1.ProductService/DeleteProduct"
 	ProductService_GetAmzProductLatestInfo_FullMethodName        = "/proto.v1.ProductService/GetAmzProductLatestInfo"
 	ProductService_AppendAmzProductActiveDetail_FullMethodName   = "/proto.v1.ProductService/AppendAmzProductActiveDetail"
+	ProductService_DeleteAmzProductActiveDetail_FullMethodName   = "/proto.v1.ProductService/DeleteAmzProductActiveDetail"
 	ProductService_AppendAmzProductInactiveDetail_FullMethodName = "/proto.v1.ProductService/AppendAmzProductInactiveDetail"
+	ProductService_DeleteAmzProductInactiveDetail_FullMethodName = "/proto.v1.ProductService/DeleteAmzProductInactiveDetail"
 )
 
 // ProductServiceClient is the client API for ProductService service.
@@ -38,7 +40,9 @@ type ProductServiceClient interface {
 	DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*DeleteProductResponse, error)
 	GetAmzProductLatestInfo(ctx context.Context, in *GetAmzProductLatestInfoRequest, opts ...grpc.CallOption) (*GetAmzProductLatestInfoResponse, error)
 	AppendAmzProductActiveDetail(ctx context.Context, in *AppendAmzProductActiveDetailRequest, opts ...grpc.CallOption) (*AppendAmzProductActiveDetailResponse, error)
+	DeleteAmzProductActiveDetail(ctx context.Context, in *DeleteAmzProductActiveDetailRequest, opts ...grpc.CallOption) (*DeleteAmzProductActiveDetailResponse, error)
 	AppendAmzProductInactiveDetail(ctx context.Context, in *AppendAmzProductInactiveDetailRequest, opts ...grpc.CallOption) (*AppendAmzProductInactiveDetailResponse, error)
+	DeleteAmzProductInactiveDetail(ctx context.Context, in *DeleteAmzProductInactiveDetailRequest, opts ...grpc.CallOption) (*DeleteAmzProductInactiveDetailResponse, error)
 }
 
 type productServiceClient struct {
@@ -103,9 +107,27 @@ func (c *productServiceClient) AppendAmzProductActiveDetail(ctx context.Context,
 	return out, nil
 }
 
+func (c *productServiceClient) DeleteAmzProductActiveDetail(ctx context.Context, in *DeleteAmzProductActiveDetailRequest, opts ...grpc.CallOption) (*DeleteAmzProductActiveDetailResponse, error) {
+	out := new(DeleteAmzProductActiveDetailResponse)
+	err := c.cc.Invoke(ctx, ProductService_DeleteAmzProductActiveDetail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productServiceClient) AppendAmzProductInactiveDetail(ctx context.Context, in *AppendAmzProductInactiveDetailRequest, opts ...grpc.CallOption) (*AppendAmzProductInactiveDetailResponse, error) {
 	out := new(AppendAmzProductInactiveDetailResponse)
 	err := c.cc.Invoke(ctx, ProductService_AppendAmzProductInactiveDetail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) DeleteAmzProductInactiveDetail(ctx context.Context, in *DeleteAmzProductInactiveDetailRequest, opts ...grpc.CallOption) (*DeleteAmzProductInactiveDetailResponse, error) {
+	out := new(DeleteAmzProductInactiveDetailResponse)
+	err := c.cc.Invoke(ctx, ProductService_DeleteAmzProductInactiveDetail_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +144,9 @@ type ProductServiceServer interface {
 	DeleteProduct(context.Context, *DeleteProductRequest) (*DeleteProductResponse, error)
 	GetAmzProductLatestInfo(context.Context, *GetAmzProductLatestInfoRequest) (*GetAmzProductLatestInfoResponse, error)
 	AppendAmzProductActiveDetail(context.Context, *AppendAmzProductActiveDetailRequest) (*AppendAmzProductActiveDetailResponse, error)
+	DeleteAmzProductActiveDetail(context.Context, *DeleteAmzProductActiveDetailRequest) (*DeleteAmzProductActiveDetailResponse, error)
 	AppendAmzProductInactiveDetail(context.Context, *AppendAmzProductInactiveDetailRequest) (*AppendAmzProductInactiveDetailResponse, error)
+	DeleteAmzProductInactiveDetail(context.Context, *DeleteAmzProductInactiveDetailRequest) (*DeleteAmzProductInactiveDetailResponse, error)
 	mustEmbedUnimplementedProductServiceServer()
 }
 
@@ -148,8 +172,14 @@ func (UnimplementedProductServiceServer) GetAmzProductLatestInfo(context.Context
 func (UnimplementedProductServiceServer) AppendAmzProductActiveDetail(context.Context, *AppendAmzProductActiveDetailRequest) (*AppendAmzProductActiveDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppendAmzProductActiveDetail not implemented")
 }
+func (UnimplementedProductServiceServer) DeleteAmzProductActiveDetail(context.Context, *DeleteAmzProductActiveDetailRequest) (*DeleteAmzProductActiveDetailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAmzProductActiveDetail not implemented")
+}
 func (UnimplementedProductServiceServer) AppendAmzProductInactiveDetail(context.Context, *AppendAmzProductInactiveDetailRequest) (*AppendAmzProductInactiveDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppendAmzProductInactiveDetail not implemented")
+}
+func (UnimplementedProductServiceServer) DeleteAmzProductInactiveDetail(context.Context, *DeleteAmzProductInactiveDetailRequest) (*DeleteAmzProductInactiveDetailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAmzProductInactiveDetail not implemented")
 }
 func (UnimplementedProductServiceServer) mustEmbedUnimplementedProductServiceServer() {}
 
@@ -272,6 +302,24 @@ func _ProductService_AppendAmzProductActiveDetail_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductService_DeleteAmzProductActiveDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAmzProductActiveDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).DeleteAmzProductActiveDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_DeleteAmzProductActiveDetail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).DeleteAmzProductActiveDetail(ctx, req.(*DeleteAmzProductActiveDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductService_AppendAmzProductInactiveDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AppendAmzProductInactiveDetailRequest)
 	if err := dec(in); err != nil {
@@ -286,6 +334,24 @@ func _ProductService_AppendAmzProductInactiveDetail_Handler(srv interface{}, ctx
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProductServiceServer).AppendAmzProductInactiveDetail(ctx, req.(*AppendAmzProductInactiveDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_DeleteAmzProductInactiveDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAmzProductInactiveDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).DeleteAmzProductInactiveDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_DeleteAmzProductInactiveDetail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).DeleteAmzProductInactiveDetail(ctx, req.(*DeleteAmzProductInactiveDetailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -322,8 +388,16 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProductService_AppendAmzProductActiveDetail_Handler,
 		},
 		{
+			MethodName: "DeleteAmzProductActiveDetail",
+			Handler:    _ProductService_DeleteAmzProductActiveDetail_Handler,
+		},
+		{
 			MethodName: "AppendAmzProductInactiveDetail",
 			Handler:    _ProductService_AppendAmzProductInactiveDetail_Handler,
+		},
+		{
+			MethodName: "DeleteAmzProductInactiveDetail",
+			Handler:    _ProductService_DeleteAmzProductInactiveDetail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
