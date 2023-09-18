@@ -84,6 +84,9 @@ message ListProductRequest {
     int32 offset=1;
     int32 limit=2;    
     string shop=3;
+    string country=4;
+    string sku=5;
+    string asin=6;
 }
 
 message ListProductResponse {

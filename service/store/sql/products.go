@@ -30,14 +30,29 @@ func (p *products) Create(ctx context.Context, rq *v1.CreateProductRequest) erro
 func (p *products) List(ctx context.Context, rq *v1.ListProductRequest) (*store.ProductList, error) {
 	result := &store.ProductList{}
 
-	var where_clause string
-	if rq.Shop == "" {
-		where_clause = "1 = 1"
-	} else {
-		where_clause = fmt.Sprintf("shop like '%%%s%%'", rq.Shop)
+	tx := p.db
+
+	if rq.Shop == "" && rq.Country == "" && rq.Sku == "" && rq.Asin == "" {
+		return nil, fmt.Errorf("缺少查询参数")
 	}
 
-	d := p.db.Where(where_clause).
+	if rq.Shop != "" {
+		tx = tx.Where("shop = ?", rq.Shop)
+	}
+
+	if rq.Country != "" {
+		tx = tx.Where("country = ?", rq.Country)
+	}
+
+	if rq.Sku != "" {
+		tx = tx.Where("sku = ?", rq.Sku)
+	}
+
+	if rq.Asin != "" {
+		tx = tx.Where("asin = ?", rq.Asin)
+	}
+
+	d := tx.
 		Offset(int(rq.Offset)).
 		Limit(int(rq.Limit)).
 		Find(&result.Items).
