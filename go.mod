@@ -1,4 +1,4 @@
-module github.com/HooYa-Bigdata/productservice
+module github.com/superjcd/productservice
 
 go 1.20
 

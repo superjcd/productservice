@@ -6,9 +6,9 @@ package server
 import (
 	"github.com/google/wire"
 
-	"github.com/HooYa-Bigdata/productservice/config"
-	v1 "github.com/HooYa-Bigdata/productservice/genproto/v1"
-	"github.com/HooYa-Bigdata/productservice/service"
+	"github.com/superjcd/productservice/config"
+	v1 "github.com/superjcd/productservice/genproto/v1"
+	"github.com/superjcd/productservice/service"
 )
 
 // InitServer Inject service's component

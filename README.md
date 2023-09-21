@@ -1,3 +1,3 @@
 # productservice
 
-[![Build](https://github.com/HooYa-Bigdata/productservice/actions/workflows/workflow.yaml/badge.svg?branch=main)](https://github.com/HooYa-Bigdata/productservice/actions/workflows/workflow.yaml)
+[![Build](https://github.com/superjcd/productservice/actions/workflows/workflow.yaml/badge.svg?branch=main)](https://github.com/superjcd/productservice/actions/workflows/workflow.yaml)

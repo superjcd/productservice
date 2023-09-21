@@ -8,8 +8,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/HooYa-Bigdata/productservice/config"
-	v1 "github.com/HooYa-Bigdata/productservice/genproto/v1"
+	"github.com/superjcd/productservice/config"
+	v1 "github.com/superjcd/productservice/genproto/v1"
 )
 
 // Run Run service server

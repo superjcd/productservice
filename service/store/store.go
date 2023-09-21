@@ -3,7 +3,7 @@ package store
 import (
 	"context"
 
-	v1 "github.com/HooYa-Bigdata/productservice/genproto/v1"
+	v1 "github.com/superjcd/productservice/genproto/v1"
 )
 
 type Factory interface {
