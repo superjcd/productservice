@@ -41,40 +41,51 @@ func (p *product_details) GetlatestInfo(ctx context.Context, rq *v1.GetAmzProduc
 }
 
 func (p *product_details) AppendActiveDetail(ctx context.Context, rq *v1.AppendAmzProductActiveDetailRequest) error {
-	active_info := store.AmzProdutActiveDetail{
-		Asin:            rq.Details.Asin,
-		Country:         rq.Details.Country,
-		Price:           rq.Details.Price,
-		Currency:        rq.Details.Currency,
-		Coupon:          rq.Details.Coupon,
-		Star:            rq.Details.Star,
-		Ratings:         rq.Details.Ratings,
-		Image:           rq.Details.Image,
-		ParentAsin:      rq.Details.ParentAsin,
-		CategoryInfo:    rq.Details.CategoryInfo,
-		TopCategoryName: rq.Details.TopCategoryName,
-		TopCategoryRank: rq.Details.TopCategoryRank,
-		Color:           rq.Details.Color,
-		Weight:          rq.Details.Weight,
-		WeightUnit:      rq.Details.WeightUnit,
-		Dimensions:      rq.Details.Dimensions,
-		DimensionsUnit:  rq.Details.DimensionsUnit,
-		CreateDate:      rq.Details.CreateDate,
+	activeInfos := make([]store.AmzProdutActiveDetail, 0, 16)
+
+	for _, d := range rq.Details {
+		activeInfo := store.AmzProdutActiveDetail{
+			Asin:            d.Asin,
+			Country:         d.Country,
+			Price:           d.Price,
+			Currency:        d.Currency,
+			Coupon:          d.Coupon,
+			Star:            d.Star,
+			Ratings:         d.Ratings,
+			Image:           d.Image,
+			ParentAsin:      d.ParentAsin,
+			CategoryInfo:    d.CategoryInfo,
+			TopCategoryName: d.TopCategoryName,
+			TopCategoryRank: d.TopCategoryRank,
+			Color:           d.Color,
+			Weight:          d.Weight,
+			WeightUnit:      d.WeightUnit,
+			Dimensions:      d.Dimensions,
+			DimensionsUnit:  d.DimensionsUnit,
+			CreateDate:      d.CreateDate,
+		}
+		activeInfos = append(activeInfos, activeInfo)
 	}
 
-	return p.db.Create(&active_info).Error
+	return p.db.Create(&activeInfos).Error
 }
 
 func (p *product_details) AppendInactiveDetail(ctx context.Context, rq *v1.AppendAmzProductInactiveDetailRequest) error {
-	inactive_info := store.AmzProdutInactiveDetail{
-		Asin:         rq.Asin,
-		Country:      rq.Country,
-		Title:        rq.Title,
-		BulletPoints: rq.BulletPoints,
-		CreateDate:   rq.CreateDate,
+	inactiveInfos := make([]store.AmzProdutInactiveDetail, 0, 16)
+
+	for _, d := range rq.Details {
+		inactiveInfo := store.AmzProdutInactiveDetail{
+			Asin:         d.Asin,
+			Country:      d.Country,
+			Title:        d.Title,
+			BulletPoints: d.BulletPoints,
+			CreateDate:   d.CreateDate,
+		}
+
+		inactiveInfos = append(inactiveInfos, inactiveInfo)
 	}
 
-	return p.db.Create(&inactive_info).Error
+	return p.db.Create(&inactiveInfos).Error
 }
 
 func (p *product_details) DeleteActiveDetail(ctx context.Context, rq *v1.DeleteAmzProductActiveDetailRequest) error {

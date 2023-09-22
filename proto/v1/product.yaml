@@ -3,19 +3,19 @@ config_version: 3
 
 http:
   rules:
-    - selector: proto.v1.ProductService.CreateProduct
+    - selector: superjcd.productservice.v1.ProductService.CreateProduct
       post: /v1/products
-    - selector: proto.v1.ProductService.ListProduct
+    - selector: superjcd.productservice.v1.ProductService.ListProduct
       get: /v1/products
-    - selector: proto.v1.ProductService.UpdateProduct
+    - selector: superjcd.productservice.v1.ProductService.UpdateProduct
       put: /v1/products
-    - selector: proto.v1.ProductService.DeleteProduct
+    - selector: superjcd.productservice.v1.ProductService.DeleteProduct
       delete: /v1/products    
 
-    - selector: proto.v1.ProductService.GetAmzProductLatestInfo
+    - selector: superjcd.productservice.v1.ProductService.GetAmzProductLatestInfo
       get: /v1/products/info/latest
-    - selector: proto.v1.ProductService.AppendAmzProductActiveDetail
+    - selector: superjcd.productservice.v1.ProductService.AppendAmzProductActiveDetail
       post: /v1/products/info/history/active
-    - selector: proto.v1.ProductService.AppendAmzProductInactiveDetail
+    - selector: superjcd.productservice.v1.ProductService.AppendAmzProductInactiveDetail
       post: /v1/products/info/history/inactive
 

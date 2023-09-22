@@ -1,26 +1,31 @@
 syntax = "proto3";
 
-package proto.v1;
+package superjcd.productservice.v1;
 
 
 option go_package =  "github.com/superjcd/productservice/genproto/v1";
 
 
 service ProductService {
+    // todo : create multiple 
     rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse){};
     rpc ListProduct(ListProductRequest) returns (ListProductResponse){};
     rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse){};
     rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse){};
     
-    rpc GetAmzProductLatestInfo(GetAmzProductLatestInfoRequest) returns (GetAmzProductLatestInfoResponse){};
+    // TODO: append multiple 
     rpc AppendAmzProductActiveDetail(AppendAmzProductActiveDetailRequest) returns (AppendAmzProductActiveDetailResponse){};
     rpc DeleteAmzProductActiveDetail(DeleteAmzProductActiveDetailRequest) returns (DeleteAmzProductActiveDetailResponse){};   
     rpc AppendAmzProductInactiveDetail(AppendAmzProductInactiveDetailRequest) returns (AppendAmzProductInactiveDetailResponse){};
     rpc DeleteAmzProductInactiveDetail(DeleteAmzProductInactiveDetailRequest) returns (DeleteAmzProductInactiveDetailResponse){};
     
+    rpc AppendProductChanges(AppendProductChangesRequest) returns (AppendProductChangesResponse);  
+    rpc ListProductChanges(ListProductChangesRequest) returns (ListProductChangesResponse){};
+    rpc DeleteProductChanges(DeleteProductChangesRequest) returns (DeleteProductChangesResponse) {};
 
-    // TODO: 获取历史记录
 
+    // 获取详情；TODO: 获取某个字段的连续变动信息
+    rpc GetAmzProductLatestInfo(GetAmzProductLatestInfoRequest) returns (GetAmzProductLatestInfoResponse){};
 }
 
 enum Status {
@@ -67,11 +72,9 @@ message AmzProductActiveDetail {
 }
 
 
-message CreateProductRequest {
-    string sku = 1;
-    string shop = 2;
-    string asin = 3;
-    string country= 4;
+
+message CreateProductRequest{
+    repeated Product products = 1;
 }
 
 message CreateProductResponse {
@@ -160,11 +163,7 @@ message GetAmzProductHistoryInfoResponse {
 }
 
 message AppendAmzProductInactiveDetailRequest  {
-    string asin=1;
-    string country=2;
-    string title=3;
-    string bullet_points=4; 
-    string create_date=5;
+    repeated AmzProductInactivateDetail details=1;
 }
 
 message AppendAmzProductInactiveDetailResponse {
@@ -173,7 +172,7 @@ message AppendAmzProductInactiveDetailResponse {
 }
 
 message AppendAmzProductActiveDetailRequest  {
-    AmzProductActiveDetail details=1;
+    repeated AmzProductActiveDetail details=1;
 }
 
 message AppendAmzProductActiveDetailResponse {
@@ -197,4 +196,53 @@ message DeleteAmzProductInactiveDetailRequest {
 message DeleteAmzProductInactiveDetailResponse {
     string msg=1;
     Status status =2;
+}
+
+
+message AppendProductChangesRequest {
+    string old_date=1;
+    string new_date=2;
+    string field=3;
+}
+
+message AppendProductChangesResponse {
+    string msg = 1; 
+    Status status =2;
+}
+
+
+message ListProductChangesRequest {
+    string user=1;
+    string country=2;
+    string create_date=3;
+    string field=4;
+    int32 offset=5;
+    int32 limit=6;
+}
+
+
+message ProductChange {
+    string my_asin=1;
+    string Product_asin=2;
+    string country=3;
+    string field  =4 ;
+    string old_value=5;
+    string new_value=6;
+
+}
+
+message ListProductChangesResponse {
+    string msg=1;
+    Status status =2;        
+    repeated ProductChange Product_changes=3;
+}
+
+
+message DeleteProductChangesRequest {
+    string min_create_date=1;
+}
+
+message DeleteProductChangesResponse {
+    string msg=1;
+    Status status =2;    
 }

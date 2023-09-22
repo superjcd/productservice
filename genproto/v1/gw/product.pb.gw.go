@@ -13,9 +13,9 @@ import (
 	"io"
 	"net/http"
 
-	extV1 "github.com/superjcd/productservice/genproto/v1"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
+	extV1 "github.com/superjcd/productservice/genproto/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
@@ -177,42 +177,6 @@ func local_request_ProductService_DeleteProduct_0(ctx context.Context, marshaler
 }
 
 var (
-	filter_ProductService_GetAmzProductLatestInfo_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-)
-
-func request_ProductService_GetAmzProductLatestInfo_0(ctx context.Context, marshaler runtime.Marshaler, client extV1.ProductServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq extV1.GetAmzProductLatestInfoRequest
-	var metadata runtime.ServerMetadata
-
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProductService_GetAmzProductLatestInfo_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	msg, err := client.GetAmzProductLatestInfo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-
-}
-
-func local_request_ProductService_GetAmzProductLatestInfo_0(ctx context.Context, marshaler runtime.Marshaler, server extV1.ProductServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq extV1.GetAmzProductLatestInfoRequest
-	var metadata runtime.ServerMetadata
-
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProductService_GetAmzProductLatestInfo_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	msg, err := server.GetAmzProductLatestInfo(ctx, &protoReq)
-	return msg, metadata, err
-
-}
-
-var (
 	filter_ProductService_AppendAmzProductActiveDetail_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
@@ -284,6 +248,42 @@ func local_request_ProductService_AppendAmzProductInactiveDetail_0(ctx context.C
 
 }
 
+var (
+	filter_ProductService_GetAmzProductLatestInfo_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_ProductService_GetAmzProductLatestInfo_0(ctx context.Context, marshaler runtime.Marshaler, client extV1.ProductServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq extV1.GetAmzProductLatestInfoRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProductService_GetAmzProductLatestInfo_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.GetAmzProductLatestInfo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_ProductService_GetAmzProductLatestInfo_0(ctx context.Context, marshaler runtime.Marshaler, server extV1.ProductServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq extV1.GetAmzProductLatestInfoRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProductService_GetAmzProductLatestInfo_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.GetAmzProductLatestInfo(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 // RegisterProductServiceHandlerServer registers the http handlers for service ProductService to "mux".
 // UnaryRPC     :call ProductServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -298,7 +298,7 @@ func RegisterProductServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.v1.ProductService/CreateProduct", runtime.WithHTTPPathPattern("/v1/products"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/CreateProduct", runtime.WithHTTPPathPattern("/v1/products"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -323,7 +323,7 @@ func RegisterProductServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.v1.ProductService/ListProduct", runtime.WithHTTPPathPattern("/v1/products"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/ListProduct", runtime.WithHTTPPathPattern("/v1/products"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -348,7 +348,7 @@ func RegisterProductServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.v1.ProductService/UpdateProduct", runtime.WithHTTPPathPattern("/v1/products"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/UpdateProduct", runtime.WithHTTPPathPattern("/v1/products"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -373,7 +373,7 @@ func RegisterProductServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.v1.ProductService/DeleteProduct", runtime.WithHTTPPathPattern("/v1/products"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/DeleteProduct", runtime.WithHTTPPathPattern("/v1/products"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -390,31 +390,6 @@ func RegisterProductServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 
 	})
 
-	mux.Handle("GET", pattern_ProductService_GetAmzProductLatestInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		var stream runtime.ServerTransportStream
-		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.v1.ProductService/GetAmzProductLatestInfo", runtime.WithHTTPPathPattern("/v1/products/info/latest"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := local_request_ProductService_GetAmzProductLatestInfo_0(annotatedContext, inboundMarshaler, server, req, pathParams)
-		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-
-		forward_ProductService_GetAmzProductLatestInfo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
-	})
-
 	mux.Handle("POST", pattern_ProductService_AppendAmzProductActiveDetail_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -423,7 +398,7 @@ func RegisterProductServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.v1.ProductService/AppendAmzProductActiveDetail", runtime.WithHTTPPathPattern("/v1/products/info/history/active"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/AppendAmzProductActiveDetail", runtime.WithHTTPPathPattern("/v1/products/info/history/active"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -448,7 +423,7 @@ func RegisterProductServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.v1.ProductService/AppendAmzProductInactiveDetail", runtime.WithHTTPPathPattern("/v1/products/info/history/inactive"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/AppendAmzProductInactiveDetail", runtime.WithHTTPPathPattern("/v1/products/info/history/inactive"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -462,6 +437,31 @@ func RegisterProductServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		}
 
 		forward_ProductService_AppendAmzProductInactiveDetail_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_ProductService_GetAmzProductLatestInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/GetAmzProductLatestInfo", runtime.WithHTTPPathPattern("/v1/products/info/latest"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_ProductService_GetAmzProductLatestInfo_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_ProductService_GetAmzProductLatestInfo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -512,7 +512,7 @@ func RegisterProductServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.v1.ProductService/CreateProduct", runtime.WithHTTPPathPattern("/v1/products"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/CreateProduct", runtime.WithHTTPPathPattern("/v1/products"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -534,7 +534,7 @@ func RegisterProductServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.v1.ProductService/ListProduct", runtime.WithHTTPPathPattern("/v1/products"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/ListProduct", runtime.WithHTTPPathPattern("/v1/products"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -556,7 +556,7 @@ func RegisterProductServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.v1.ProductService/UpdateProduct", runtime.WithHTTPPathPattern("/v1/products"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/UpdateProduct", runtime.WithHTTPPathPattern("/v1/products"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -578,7 +578,7 @@ func RegisterProductServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.v1.ProductService/DeleteProduct", runtime.WithHTTPPathPattern("/v1/products"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/DeleteProduct", runtime.WithHTTPPathPattern("/v1/products"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -594,35 +594,13 @@ func RegisterProductServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 
 	})
 
-	mux.Handle("GET", pattern_ProductService_GetAmzProductLatestInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.v1.ProductService/GetAmzProductLatestInfo", runtime.WithHTTPPathPattern("/v1/products/info/latest"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := request_ProductService_GetAmzProductLatestInfo_0(annotatedContext, inboundMarshaler, client, req, pathParams)
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-
-		forward_ProductService_GetAmzProductLatestInfo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
-	})
-
 	mux.Handle("POST", pattern_ProductService_AppendAmzProductActiveDetail_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.v1.ProductService/AppendAmzProductActiveDetail", runtime.WithHTTPPathPattern("/v1/products/info/history/active"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/AppendAmzProductActiveDetail", runtime.WithHTTPPathPattern("/v1/products/info/history/active"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -644,7 +622,7 @@ func RegisterProductServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.v1.ProductService/AppendAmzProductInactiveDetail", runtime.WithHTTPPathPattern("/v1/products/info/history/inactive"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/AppendAmzProductInactiveDetail", runtime.WithHTTPPathPattern("/v1/products/info/history/inactive"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -660,6 +638,28 @@ func RegisterProductServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 
 	})
 
+	mux.Handle("GET", pattern_ProductService_GetAmzProductLatestInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/superjcd.productservice.v1.ProductService/GetAmzProductLatestInfo", runtime.WithHTTPPathPattern("/v1/products/info/latest"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_ProductService_GetAmzProductLatestInfo_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_ProductService_GetAmzProductLatestInfo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
@@ -672,11 +672,11 @@ var (
 
 	pattern_ProductService_DeleteProduct_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "products"}, ""))
 
-	pattern_ProductService_GetAmzProductLatestInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "products", "info", "latest"}, ""))
-
 	pattern_ProductService_AppendAmzProductActiveDetail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"v1", "products", "info", "history", "active"}, ""))
 
 	pattern_ProductService_AppendAmzProductInactiveDetail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"v1", "products", "info", "history", "inactive"}, ""))
+
+	pattern_ProductService_GetAmzProductLatestInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "products", "info", "latest"}, ""))
 )
 
 var (
@@ -688,9 +688,9 @@ var (
 
 	forward_ProductService_DeleteProduct_0 = runtime.ForwardResponseMessage
 
-	forward_ProductService_GetAmzProductLatestInfo_0 = runtime.ForwardResponseMessage
-
 	forward_ProductService_AppendAmzProductActiveDetail_0 = runtime.ForwardResponseMessage
 
 	forward_ProductService_AppendAmzProductInactiveDetail_0 = runtime.ForwardResponseMessage
+
+	forward_ProductService_GetAmzProductLatestInfo_0 = runtime.ForwardResponseMessage
 )

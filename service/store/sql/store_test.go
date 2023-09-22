@@ -45,14 +45,24 @@ func (suite *FakeStoreTestSuite) TearDownSuite() {
 
 // products
 func (suite *FakeStoreTestSuite) TestCreateProduct() {
-	product := &v1.CreateProductRequest{
-		Sku:     "1001",
-		Shop:    "apple",
-		Asin:    "B1001",
-		Country: "US",
+	products := &v1.CreateProductRequest{
+		Products: []*v1.Product{
+			{
+				Sku:     "1001",
+				Shop:    "apple",
+				Asin:    "B1001",
+				Country: "US",
+			},
+			{
+				Sku:     "1010",
+				Shop:    "pear",
+				Asin:    "B11111",
+				Country: "US",
+			},
+		},
 	}
 
-	err := suite.FakeFactory.Products().Create(context.Background(), product)
+	err := suite.FakeFactory.Products().Create(context.Background(), products)
 	assert.Nil(suite.T(), err)
 }
 
@@ -112,11 +122,13 @@ func (suite *FakeStoreTestSuite) TestZDeleteProduct() {
 func (suite *FakeStoreTestSuite) TestAppendeDetail() {
 	// 导入active
 	rq := &v1.AppendAmzProductActiveDetailRequest{
-		Details: &v1.AmzProductActiveDetail{
-			Asin:       "B1001",
-			Country:    "US",
-			Price:      "100",
-			CreateDate: "2022-01-01",
+		Details: []*v1.AmzProductActiveDetail{
+			{
+				Asin:       "B1001",
+				Country:    "US",
+				Price:      "100",
+				CreateDate: "2022-01-01",
+			},
 		},
 	}
 
@@ -125,10 +137,14 @@ func (suite *FakeStoreTestSuite) TestAppendeDetail() {
 
 	// 导入inactive
 	rq2 := &v1.AppendAmzProductInactiveDetailRequest{
-		Asin:         "B1001",
-		Country:      "US",
-		Title:        "Iphone 15",
-		BulletPoints: "1 good 2 cheap",
+		Details: []*v1.AmzProductInactivateDetail{
+			{
+				Asin:         "B1001",
+				Country:      "US",
+				Title:        "Iphone 15",
+				BulletPoints: "1 good 2 cheap",
+			},
+		},
 	}
 
 	err2 := suite.FakeFactory.ProductDetails().AppendInactiveDetail(context.Background(), rq2)
@@ -145,11 +161,13 @@ func (suite *FakeStoreTestSuite) TestAppendeDetail() {
 
 	// 导入更新的数据
 	rq4 := &v1.AppendAmzProductActiveDetailRequest{
-		Details: &v1.AmzProductActiveDetail{
-			Asin:       "B1001",
-			Country:    "US",
-			Price:      "110",
-			CreateDate: "2022-01-01", // 用了同一天的数据
+		Details: []*v1.AmzProductActiveDetail{
+			{
+				Asin:       "B1001",
+				Country:    "US",
+				Price:      "110",
+				CreateDate: "2022-01-01", // 用了同一天的数据
+			},
 		},
 	}
 

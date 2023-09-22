@@ -16,15 +16,20 @@ type products struct {
 var _ store.ProductStore = (*products)(nil)
 
 func (p *products) Create(ctx context.Context, rq *v1.CreateProductRequest) error {
+	products := make([]store.Product, 0, 16)
 
-	product := store.Product{
-		Sku:     rq.Sku,
-		Shop:    rq.Shop,
-		Asin:    rq.Asin,
-		Country: rq.Country,
+	for _, p := range rq.Products {
+		product := store.Product{
+			Sku:     p.Sku,
+			Shop:    p.Shop,
+			Asin:    p.Asin,
+			Country: p.Country,
+		}
+
+		products = append(products, product)
 	}
 
-	return p.db.Create(&product).Error // 我只存储了用户， 但没有处理和用户group有关的逻辑
+	return p.db.Create(&products).Error // 我只存储了用户， 但没有处理和用户group有关的逻辑
 }
 
 func (p *products) List(ctx context.Context, rq *v1.ListProductRequest) (*store.ProductList, error) {
