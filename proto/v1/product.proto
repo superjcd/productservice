@@ -9,23 +9,29 @@ option go_package =  "github.com/superjcd/productservice/genproto/v1";
 service ProductService {
     // todo : create multiple 
     rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse){};
-    rpc ListProduct(ListProductRequest) returns (ListProductResponse){};
+    rpc ListProduct(ListProductRequest) returns (ListProductResponse){};    // 获取的是
+
     rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse){};
     rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse){};
     
     // TODO: append multiple 
     rpc AppendAmzProductActiveDetail(AppendAmzProductActiveDetailRequest) returns (AppendAmzProductActiveDetailResponse){};
+    rpc ListProductAmzDetals(ListAmzProductDetailsRequest) returns (ListAmzProductDetailsResponse);  
     rpc DeleteAmzProductActiveDetail(DeleteAmzProductActiveDetailRequest) returns (DeleteAmzProductActiveDetailResponse){};   
     rpc AppendAmzProductInactiveDetail(AppendAmzProductInactiveDetailRequest) returns (AppendAmzProductInactiveDetailResponse){};
     rpc DeleteAmzProductInactiveDetail(DeleteAmzProductInactiveDetailRequest) returns (DeleteAmzProductInactiveDetailResponse){};
+    rpc GetProductHistoryInfo(GetProductHistoryInfoRequest) returns (GetProductHistoryInfoResponse){}; 
     
+    // active 变化
     rpc AppendProductChanges(AppendProductChangesRequest) returns (AppendProductChangesResponse);  
     rpc ListProductChanges(ListProductChangesRequest) returns (ListProductChangesResponse){};
     rpc DeleteProductChanges(DeleteProductChangesRequest) returns (DeleteProductChangesResponse) {};
+    
+    // inactive details
+    rpc AppendInactiveProductChanges(AppendProductChangesRequest) returns (AppendProductChangesResponse);  
+    rpc ListInactiveProductChanges(ListProductChangesRequest) returns (ListProductChangesResponse){};
+    rpc DeleteInactiveProductChanges(DeleteProductChangesRequest) returns (DeleteProductChangesResponse) {};
 
-
-    // 获取详情；TODO: 获取某个字段的连续变动信息
-    rpc GetAmzProductLatestInfo(GetAmzProductLatestInfoRequest) returns (GetAmzProductLatestInfoResponse){};
 }
 
 enum Status {
@@ -120,18 +126,6 @@ message DeleteProductResponse {
     Status status =2;
 }
 
-message GetAmzProductLatestInfoRequest {
-    string asin = 1;
-    string country=2;
-}
-
-
-message GetAmzProductLatestInfoResponse {
-    string msg=1;
-    Status status =2;
-    AmzProductInactivateDetail amz_product_incative_details = 3;
-    AmzProductActiveDetail amz_product_ative_details=4;
-}
 
 enum Field {
     price =0;
@@ -141,26 +135,6 @@ enum Field {
     top_category_rank=4; 
 }
 
-message GetAmzProductHistoryInfoRequest {
-    string asin = 1;
-    string country=2;
-    string field=3;
-    string start_date=4;
-    string end_date=5;
-}
-
-
-message AmzProductHistoryInfoResponse {
-    repeated string datetimes=1;
-    repeated string values=2;
-
-}
-
-message GetAmzProductHistoryInfoResponse {
-    string msg=1;
-    Status status =2;
-    AmzProductHistoryInfoResponse data=3;
-}
 
 message AppendAmzProductInactiveDetailRequest  {
     repeated AmzProductInactivateDetail details=1;
@@ -212,7 +186,7 @@ message AppendProductChangesResponse {
 
 
 message ListProductChangesRequest {
-    string user=1;
+    string shop=1;
     string country=2;
     string create_date=3;
     string field=4;
@@ -222,12 +196,11 @@ message ListProductChangesRequest {
 
 
 message ProductChange {
-    string my_asin=1;
-    string Product_asin=2;
-    string country=3;
-    string field  =4 ;
-    string old_value=5;
-    string new_value=6;
+    string asin=1;
+    string country=2;
+    string field  =3;
+    string old_value=4;
+    string new_value=5;
 
 }
 
@@ -245,4 +218,45 @@ message DeleteProductChangesRequest {
 message DeleteProductChangesResponse {
     string msg=1;
     Status status =2;    
+}
+
+
+
+message ListAmzProductDetailsRequest {  
+    string shop = 1;
+    string country=2;
+    string create_date=3;
+    int32 offset=4;
+    int32 limit=5;    
+    
+}
+
+
+message ListAmzProductDetailsResponse {
+    string msg=1;
+    Status status =2;
+    repeated AmzProductActiveDetail details=3;
+    
+}
+
+
+message GetProductHistoryInfoRequest {
+    string asin = 1;
+    string country=2;
+    string field=3;
+    string start_date=4;
+    string end_date=5;
+}
+
+
+message HistoryInfoRecord {
+    string datetime=1;
+    string value=2;
+
+}
+
+message GetProductHistoryInfoResponse {
+    string msg=1;
+    Status status =2;
+    repeated HistoryInfoRecord records=3;
 }

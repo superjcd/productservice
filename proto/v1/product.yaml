@@ -12,8 +12,6 @@ http:
     - selector: superjcd.productservice.v1.ProductService.DeleteProduct
       delete: /v1/products    
 
-    - selector: superjcd.productservice.v1.ProductService.GetAmzProductLatestInfo
-      get: /v1/products/info/latest
     - selector: superjcd.productservice.v1.ProductService.AppendAmzProductActiveDetail
       post: /v1/products/info/history/active
     - selector: superjcd.productservice.v1.ProductService.AppendAmzProductInactiveDetail

@@ -49,12 +49,12 @@ func (s *Server) CreateProduct(ctx context.Context, rq *v1.CreateProductRequest)
 }
 
 func (s *Server) ListProduct(ctx context.Context, rq *v1.ListProductRequest) (*v1.ListProductResponse, error) {
-	groups, err := s.datastore.Products().List(ctx, rq)
+	products, err := s.datastore.Products().List(ctx, rq)
 	if err != nil {
 		return &v1.ListProductResponse{Msg: "获取列表失败", Status: v1.Status_failure}, err
 	}
 
-	resp := groups.ConvertToListProductResponse("成功获取列表", v1.Status_success)
+	resp := products.ConvertToListProductResponse("成功获取列表", v1.Status_success)
 
 	return &resp, nil
 }
@@ -79,16 +79,6 @@ func (s *Server) DeleteProduct(ctx context.Context, rq *v1.DeleteProductRequest)
 	return &v1.DeleteProductResponse{Msg: "删除成功", Status: v1.Status_success}, nil
 }
 
-func (s *Server) GetAmzProductLatestInfo(ctx context.Context, rq *v1.GetAmzProductLatestInfoRequest) (*v1.GetAmzProductLatestInfoResponse, error) {
-	if info, err := s.datastore.ProductDetails().GetlatestInfo(ctx, rq); err != nil {
-		return &v1.GetAmzProductLatestInfoResponse{Msg: "删除失败", Status: v1.Status_failure}, err
-	} else {
-		resp := info.ConvertToGetLatestInfoResponse("成功获取列表", v1.Status_success)
-
-		return &resp, nil
-	}
-}
-
 func (s *Server) AppendAmzProductActiveDetail(ctx context.Context, rq *v1.AppendAmzProductActiveDetailRequest) (*v1.AppendAmzProductActiveDetailResponse, error) {
 	if err := s.datastore.ProductDetails().AppendActiveDetail(ctx, rq); err != nil {
 		return &v1.AppendAmzProductActiveDetailResponse{Msg: "追加Active details 失败", Status: v1.Status_failure}, err
@@ -96,9 +86,88 @@ func (s *Server) AppendAmzProductActiveDetail(ctx context.Context, rq *v1.Append
 	return &v1.AppendAmzProductActiveDetailResponse{Msg: "追加Active details成功", Status: v1.Status_success}, nil
 }
 
+func (s *Server) ListProductAmzDetals(ctx context.Context, rq *v1.ListAmzProductDetailsRequest) (*v1.ListAmzProductDetailsResponse, error) {
+	details, err := s.datastore.ProductDetails().ListActiveDetails(ctx, rq)
+
+	if err != nil {
+		return &v1.ListAmzProductDetailsResponse{Msg: "get product details failed", Status: v1.Status_failure}, err
+	}
+
+	resp := details.ConvertToListProductdetails("get product details successfully", v1.Status_success)
+
+	return &resp, nil
+}
+
 func (s *Server) AppendAmzProductInactiveDetail(ctx context.Context, rq *v1.AppendAmzProductInactiveDetailRequest) (*v1.AppendAmzProductInactiveDetailResponse, error) {
 	if err := s.datastore.ProductDetails().AppendInactiveDetail(ctx, rq); err != nil {
-		return &v1.AppendAmzProductInactiveDetailResponse{Msg: "追加Inactive details 失败", Status: v1.Status_failure}, err
+		return &v1.AppendAmzProductInactiveDetailResponse{Msg: "append Inactive details failed", Status: v1.Status_failure}, err
 	}
-	return &v1.AppendAmzProductInactiveDetailResponse{Msg: "追加Inactive details成功", Status: v1.Status_success}, nil
+	return &v1.AppendAmzProductInactiveDetailResponse{Msg: "append Inactive details success", Status: v1.Status_success}, nil
+}
+
+func (s *Server) AppendProductChanges(ctx context.Context, rq *v1.AppendProductChangesRequest) (*v1.AppendProductChangesResponse, error) {
+	if err := s.datastore.ProductChanges().Append(ctx, rq); err != nil {
+		return &v1.AppendProductChangesResponse{Msg: "append product changes failed", Status: v1.Status_failure}, err
+	}
+	return &v1.AppendProductChangesResponse{Msg: "append product changes success", Status: v1.Status_success}, nil
+}
+
+func (s *Server) ListProductChanges(ctx context.Context, rq *v1.ListProductChangesRequest) (*v1.ListProductChangesResponse, error) {
+	productChanges, err := s.datastore.ProductChanges().List(ctx, rq)
+	if err != nil {
+		return &v1.ListProductChangesResponse{Msg: "get product changes list failed", Status: v1.Status_failure}, err
+	}
+
+	resp := productChanges.ConvertToListProductChangeResponse("get product changes list success", v1.Status_success)
+
+	return &resp, nil
+}
+
+func (s *Server) DeleteProductChanges(ctx context.Context, rq *v1.DeleteProductChangesRequest) (*v1.DeleteProductChangesResponse, error) {
+	if err := s.datastore.ProductChanges().Delete(ctx, rq); err != nil {
+		return &v1.DeleteProductChangesResponse{Msg: "delete product changes failed", Status: v1.Status_failure}, err
+	}
+	return &v1.DeleteProductChangesResponse{Msg: "delete product changes success", Status: v1.Status_success}, nil
+}
+
+func (s *Server) AppendInactiveProductChanges(ctx context.Context, rq *v1.AppendProductChangesRequest) (*v1.AppendProductChangesResponse, error) {
+	if err := s.datastore.InactiveProductChanges().Append(ctx, rq); err != nil {
+		return &v1.AppendProductChangesResponse{Msg: "append product changes failed", Status: v1.Status_failure}, err
+	}
+	return &v1.AppendProductChangesResponse{Msg: "append product changes success", Status: v1.Status_success}, nil
+}
+
+func (s *Server) ListInactiveProductChanges(ctx context.Context, rq *v1.ListProductChangesRequest) (*v1.ListProductChangesResponse, error) {
+	productChanges, err := s.datastore.InactiveProductChanges().List(ctx, rq)
+	if err != nil {
+		return &v1.ListProductChangesResponse{Msg: "get product changes list failed", Status: v1.Status_failure}, err
+	}
+
+	resp := productChanges.ConvertToListInactiveProductChangeResponse("get product changes list success", v1.Status_success)
+
+	return &resp, nil
+}
+
+func (s *Server) DeleteInactiveProductChanges(ctx context.Context, rq *v1.DeleteProductChangesRequest) (*v1.DeleteProductChangesResponse, error) {
+	if err := s.datastore.InactiveProductChanges().Delete(ctx, rq); err != nil {
+		return &v1.DeleteProductChangesResponse{Msg: "delete product changes failed", Status: v1.Status_failure}, err
+	}
+	return &v1.DeleteProductChangesResponse{Msg: "delete product changes success", Status: v1.Status_success}, nil
+}
+
+// GetProductHistoryInfo
+func (s *Server) GetProductHistoryInfo(ctx context.Context, rq *v1.GetProductHistoryInfoRequest) (*v1.GetProductHistoryInfoResponse, error) {
+	records := make([]*v1.HistoryInfoRecord, 0, 16)
+
+	items, err := s.datastore.ProductDetails().GetProductHistoryInfo(ctx, rq)
+
+	if err != nil {
+		return &v1.GetProductHistoryInfoResponse{Msg: "get product history info failed", Status: v1.Status_failure}, err
+	}
+
+	for _, item := range items {
+		records = append(records, &v1.HistoryInfoRecord{Datetime: item.Datetime, Value: item.Value})
+	}
+
+	return &v1.GetProductHistoryInfoResponse{Msg: "get product history info successfully", Status: v1.Status_success, Records: records}, nil
 }

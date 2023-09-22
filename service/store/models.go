@@ -38,7 +38,7 @@ func (pl *ProductList) ConvertToListProductResponse(msg string, status v1.Status
 }
 
 // timestamp uint64,  可以通过create_at转化过来
-type AmzProdutInactiveDetail struct {
+type AmzProductInactiveDetail struct {
 	gorm.Model
 	Asin         string `json:"asin" gorm:"column:asin;index:idx_inactive_product_details,priority:1"`
 	Country      string `json:"country" gorm:"column:country;index:idx_inactive_product_details,priority:2"`
@@ -47,7 +47,7 @@ type AmzProdutInactiveDetail struct {
 	CreateDate   string `json:"create_date" gorm:"column:create_date;idx_inactive_product_details,priority:3"`
 }
 
-type AmzProdutActiveDetail struct {
+type AmzProductActiveDetail struct {
 	gorm.Model
 	Asin            string `json:"asin" gorm:"column:asin;index:idx_product_details,priority:1"`
 	Country         string `json:"country" gorm:"column:country;index:idx_product_details,priority:2"`
@@ -69,70 +69,118 @@ type AmzProdutActiveDetail struct {
 	CreateDate      string `json:"create_date" gorm:"column:create_date;index:idx_product_details,priority:3"`
 }
 
-type ProductLatestInfo struct {
-	InactiveDetails *AmzProdutInactiveDetail
-	ActiveDetales   *AmzProdutActiveDetail
+type ProductDetails struct {
+	TotalCount int64                     `json:"totalCount"`
+	Items      []*AmzProductActiveDetail `json:"items"`
 }
 
-func (p *ProductLatestInfo) ConvertToGetLatestInfoResponse(msg string, status v1.Status) v1.GetAmzProductLatestInfoResponse {
-	return v1.GetAmzProductLatestInfoResponse{
-		Msg:    msg,
-		Status: status,
-		AmzProductIncativeDetails: &v1.AmzProductInactivateDetail{
-			Asin:         p.InactiveDetails.Asin,
-			Country:      p.InactiveDetails.Country,
-			Title:        p.InactiveDetails.Title,
-			BulletPoints: p.InactiveDetails.BulletPoints,
-		},
-		AmzProductAtiveDetails: &v1.AmzProductActiveDetail{
-			Asin:            p.InactiveDetails.Asin,
-			Country:         p.InactiveDetails.Country,
-			Price:           p.ActiveDetales.Price,
-			Currency:        p.ActiveDetales.Currency,
-			Star:            p.ActiveDetales.Star,
-			Ratings:         p.ActiveDetales.Ratings,
-			Image:           p.ActiveDetales.Image,
-			ParentAsin:      p.ActiveDetales.ParentAsin,
-			CategoryInfo:    p.ActiveDetales.CategoryInfo,
-			TopCategoryName: p.ActiveDetales.TopCategoryName,
-			TopCategoryRank: p.ActiveDetales.TopCategoryRank,
-			Color:           p.ActiveDetales.Color,
-			Weight:          p.ActiveDetales.Weight,
-			WeightUnit:      p.ActiveDetales.WeightUnit,
-			Dimensions:      p.ActiveDetales.Dimensions,
-			DimensionsUnit:  p.ActiveDetales.DimensionsUnit,
-			CreateDate:      p.ActiveDetales.CreateDate,
-		},
+func (p *ProductDetails) ConvertToListProductdetails(msg string, status v1.Status) v1.ListAmzProductDetailsResponse {
+	details := make([]*v1.AmzProductActiveDetail, 0, 16)
+
+	for _, item := range p.Items {
+		details = append(details, &v1.AmzProductActiveDetail{
+			Asin:            item.Asin,
+			Country:         item.Country,
+			Price:           item.Price,
+			Currency:        item.Currency,
+			Star:            item.Star,
+			Ratings:         item.Ratings,
+			Image:           item.Image,
+			ParentAsin:      item.ParentAsin,
+			CategoryInfo:    item.CategoryInfo,
+			TopCategoryName: item.TopCategoryName,
+			TopCategoryRank: item.TopCategoryRank,
+			Color:           item.Color,
+			Weight:          item.Weight,
+			WeightUnit:      item.WeightUnit,
+			Dimensions:      item.Dimensions,
+			DimensionsUnit:  item.DimensionsUnit,
+			CreateDate:      item.CreateDate,
+		})
+	}
+
+	return v1.ListAmzProductDetailsResponse{Msg: msg, Status: status, Details: details}
+
+}
+
+type ProductHistoryInfoRecord struct {
+	Datetime string `json:"datetime"`
+	Value    string `json:"value"`
+}
+
+type ProductChange struct {
+	gorm.Model
+	Asin       string `json:"asin" gorm:"column:asin"`
+	Country    string `json:"country" gorm:"column:country"`
+	Field      string `json:"field" gorm:"column:field"`
+	OldValue   string `json:"old_value" gorm:"column:old_value"`
+	NewValue   string `json:"new_value" gorm:"column:new_value"`
+	CreateDate string `json:"create_date" gorm:"column:create_date"`
+}
+
+type ProductChangeList struct {
+	TotalCount int             `json:"totalCount"`
+	Items      []ProductChange `json:"items"`
+}
+
+func (pcl *ProductChangeList) ConvertToListProductChangeResponse(msg string, status v1.Status) v1.ListProductChangesResponse {
+	pcs := make([]*v1.ProductChange, 0, 8)
+
+	for _, pc := range pcl.Items {
+		pcs = append(pcs, &v1.ProductChange{
+			Country:  pc.Country,
+			Asin:     pc.Asin,
+			Field:    pc.Field,
+			OldValue: pc.OldValue,
+			NewValue: pc.NewValue,
+		})
+	}
+	return v1.ListProductChangesResponse{
+		Msg:            msg,
+		Status:         status,
+		ProductChanges: pcs,
 	}
 }
 
-type ProductHistoryInfos struct {
-	TotalCount int64    `json:"totalCount"`
-	Field      string   `json:"field"`
-	Datetimes  []string `json:"datetimes"`
-	Values     []string `json:"values"`
+// 创建一张和ProductChange相同结构的表
+type InactiveProductChange struct {
+	gorm.Model
+	Asin       string `json:"asin" gorm:"column:asin"`
+	Country    string `json:"country" gorm:"column:country"`
+	Field      string `json:"field" gorm:"column:field"`
+	OldValue   string `json:"old_value" gorm:"column:old_value"`
+	NewValue   string `json:"new_value" gorm:"column:new_value"`
+	CreateDate string `json:"create_date" gorm:"column:create_date"`
 }
 
-func (ph *ProductHistoryInfos) ConvertToListProductResponse(msg string, status v1.Status) v1.GetAmzProductHistoryInfoResponse {
-	return v1.GetAmzProductHistoryInfoResponse{
-		Msg:    msg,
-		Status: status,
-		Data: &v1.AmzProductHistoryInfoResponse{
-			Datetimes: ph.Datetimes,
-			Values:    ph.Values,
-		},
+type InactiveProductChangeList struct {
+	TotalCount int                     `json:"totalCount"`
+	Items      []InactiveProductChange `json:"items"`
+}
+
+func (rcl *InactiveProductChangeList) ConvertToListInactiveProductChangeResponse(msg string, status v1.Status) v1.ListProductChangesResponse {
+	pcs := make([]*v1.ProductChange, 0, 8)
+
+	for _, pc := range rcl.Items {
+		pcs = append(pcs, &v1.ProductChange{
+			Country:  pc.Country,
+			Asin:     pc.Asin,
+			Field:    pc.Field,
+			OldValue: pc.OldValue,
+			NewValue: pc.NewValue,
+		})
+	}
+	return v1.ListProductChangesResponse{
+		Msg:            msg,
+		Status:         status,
+		ProductChanges: pcs,
 	}
 }
 
 func MigrateDatabase(db *gorm.DB) error {
-	if err := db.AutoMigrate(Product{}); err != nil {
+	if err := db.AutoMigrate(Product{}, ProductChange{}, InactiveProductChange{}, AmzProductActiveDetail{}, AmzProductInactiveDetail{}); err != nil {
 		return err
 	}
-	if err := db.AutoMigrate(AmzProdutActiveDetail{}); err != nil {
-		return err
-	}
-	if err := db.AutoMigrate(AmzProdutInactiveDetail{}); err != nil {
-		return err
-	}
+
 	return nil
 }

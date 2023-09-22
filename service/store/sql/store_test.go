@@ -78,7 +78,7 @@ func (suite *FakeStoreTestSuite) TestListProducts() {
 	assert.Equal(suite.T(), 1, len(productList.Items))
 }
 
-func (suite *FakeStoreTestSuite) TestUpdateroduct() {
+func (suite *FakeStoreTestSuite) TestUpdateProduct() {
 	product := &v1.UpdateProductRequest{
 		Sku:     "1001",
 		Shop:    "elppa",
@@ -143,21 +143,13 @@ func (suite *FakeStoreTestSuite) TestAppendeDetail() {
 				Country:      "US",
 				Title:        "Iphone 15",
 				BulletPoints: "1 good 2 cheap",
+				CreateDate:   "2022-01-01",
 			},
 		},
 	}
 
 	err2 := suite.FakeFactory.ProductDetails().AppendInactiveDetail(context.Background(), rq2)
 	assert.Nil(suite.T(), err2)
-
-	// 获取最新数据
-	rq3 := &v1.GetAmzProductLatestInfoRequest{
-		Asin:    "B1001",
-		Country: "US",
-	}
-	info, err3 := suite.FakeFactory.ProductDetails().GetlatestInfo(context.Background(), rq3)
-	assert.Nil(suite.T(), err3)
-	assert.Equal(suite.T(), "100", info.ActiveDetales.Price)
 
 	// 导入更新的数据
 	rq4 := &v1.AppendAmzProductActiveDetailRequest{
@@ -166,7 +158,7 @@ func (suite *FakeStoreTestSuite) TestAppendeDetail() {
 				Asin:       "B1001",
 				Country:    "US",
 				Price:      "110",
-				CreateDate: "2022-01-01", // 用了同一天的数据
+				CreateDate: "2022-01-02",
 			},
 		},
 	}
@@ -174,15 +166,44 @@ func (suite *FakeStoreTestSuite) TestAppendeDetail() {
 	err4 := suite.FakeFactory.ProductDetails().AppendActiveDetail(context.Background(), rq4)
 	assert.Nil(suite.T(), err4)
 
-	// 获取最新数据
-	rq5 := &v1.GetAmzProductLatestInfoRequest{
-		Asin:    "B1001",
-		Country: "US",
+}
+
+func (suite *FakeStoreTestSuite) TestXListProductDetails() {
+	rq := &v1.ListAmzProductDetailsRequest{
+		Shop:       "elppa",
+		Country:    "US",
+		CreateDate: "2022-01-02",
+		Offset:     0,
+		Limit:      10,
 	}
-	info2, err5 := suite.FakeFactory.ProductDetails().GetlatestInfo(context.Background(), rq5)
-	assert.Nil(suite.T(), err5)
-	assert.Equal(suite.T(), "110", info2.ActiveDetales.Price)
-	assert.Equal(suite.T(), "Iphone 15", info2.InactiveDetails.Title)
+
+	_, err := suite.FakeFactory.ProductDetails().ListActiveDetails(context.Background(), rq)
+	assert.Nil(suite.T(), err)
+}
+
+func (suite *FakeStoreTestSuite) TestYAppendProductChanges() {
+	rq := &v1.AppendProductChangesRequest{
+		OldDate: "2022-01-01",
+		NewDate: "2022-01-02",
+		Field:   "price",
+	}
+
+	err := suite.FakeFactory.ProductChanges().Append(context.Background(), rq)
+	assert.Nil(suite.T(), err)
+}
+
+func (suite *FakeStoreTestSuite) TestYListProductChanges() {
+	rq := &v1.ListProductChangesRequest{
+		Shop:       "elppa",
+		Country:    "US",
+		CreateDate: "2022-01-02",
+		Field:      "price",
+		Offset:     0,
+		Limit:      10,
+	}
+	list, err := suite.FakeFactory.ProductChanges().List(context.Background(), rq)
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), 1, list.TotalCount)
 
 }
 
@@ -201,6 +222,18 @@ func (suite *FakeStoreTestSuite) TestZDeleteInactiveDetail() {
 	err := suite.FakeFactory.ProductDetails().DeleteInactiveDetail(context.Background(), rq)
 	assert.Nil(suite.T(), err)
 }
+
+// func (suite *FakeStoreTestSuite) TestGetProductHistoryInfo() {
+// 	rq := &v1.GetProductHistoryInfoRequest{
+// 		Asin:      "B1001",
+// 		Country:   "US",
+// 		Field:     "price",
+// 		StartDate: "2020-01-01",
+// 		EndDate:   "2023-01-01",
+// 	}
+// 	_, err := suite.FakeFactory.ProductDetails().GetProductHistoryInfo(context.Background(), rq)
+// 	assert.Nil(suite.T(), err)
+// }
 
 func TestFakeStoreSuite(t *testing.T) {
 	suite.Run(t, new(FakeStoreTestSuite))

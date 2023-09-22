@@ -24,13 +24,17 @@ const (
 	ProductService_UpdateProduct_FullMethodName                  = "/superjcd.productservice.v1.ProductService/UpdateProduct"
 	ProductService_DeleteProduct_FullMethodName                  = "/superjcd.productservice.v1.ProductService/DeleteProduct"
 	ProductService_AppendAmzProductActiveDetail_FullMethodName   = "/superjcd.productservice.v1.ProductService/AppendAmzProductActiveDetail"
+	ProductService_ListProductAmzDetals_FullMethodName           = "/superjcd.productservice.v1.ProductService/ListProductAmzDetals"
 	ProductService_DeleteAmzProductActiveDetail_FullMethodName   = "/superjcd.productservice.v1.ProductService/DeleteAmzProductActiveDetail"
 	ProductService_AppendAmzProductInactiveDetail_FullMethodName = "/superjcd.productservice.v1.ProductService/AppendAmzProductInactiveDetail"
 	ProductService_DeleteAmzProductInactiveDetail_FullMethodName = "/superjcd.productservice.v1.ProductService/DeleteAmzProductInactiveDetail"
+	ProductService_GetProductHistoryInfo_FullMethodName          = "/superjcd.productservice.v1.ProductService/GetProductHistoryInfo"
 	ProductService_AppendProductChanges_FullMethodName           = "/superjcd.productservice.v1.ProductService/AppendProductChanges"
 	ProductService_ListProductChanges_FullMethodName             = "/superjcd.productservice.v1.ProductService/ListProductChanges"
 	ProductService_DeleteProductChanges_FullMethodName           = "/superjcd.productservice.v1.ProductService/DeleteProductChanges"
-	ProductService_GetAmzProductLatestInfo_FullMethodName        = "/superjcd.productservice.v1.ProductService/GetAmzProductLatestInfo"
+	ProductService_AppendInactiveProductChanges_FullMethodName   = "/superjcd.productservice.v1.ProductService/AppendInactiveProductChanges"
+	ProductService_ListInactiveProductChanges_FullMethodName     = "/superjcd.productservice.v1.ProductService/ListInactiveProductChanges"
+	ProductService_DeleteInactiveProductChanges_FullMethodName   = "/superjcd.productservice.v1.ProductService/DeleteInactiveProductChanges"
 )
 
 // ProductServiceClient is the client API for ProductService service.
@@ -44,14 +48,19 @@ type ProductServiceClient interface {
 	DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*DeleteProductResponse, error)
 	// TODO: append multiple
 	AppendAmzProductActiveDetail(ctx context.Context, in *AppendAmzProductActiveDetailRequest, opts ...grpc.CallOption) (*AppendAmzProductActiveDetailResponse, error)
+	ListProductAmzDetals(ctx context.Context, in *ListAmzProductDetailsRequest, opts ...grpc.CallOption) (*ListAmzProductDetailsResponse, error)
 	DeleteAmzProductActiveDetail(ctx context.Context, in *DeleteAmzProductActiveDetailRequest, opts ...grpc.CallOption) (*DeleteAmzProductActiveDetailResponse, error)
 	AppendAmzProductInactiveDetail(ctx context.Context, in *AppendAmzProductInactiveDetailRequest, opts ...grpc.CallOption) (*AppendAmzProductInactiveDetailResponse, error)
 	DeleteAmzProductInactiveDetail(ctx context.Context, in *DeleteAmzProductInactiveDetailRequest, opts ...grpc.CallOption) (*DeleteAmzProductInactiveDetailResponse, error)
+	GetProductHistoryInfo(ctx context.Context, in *GetProductHistoryInfoRequest, opts ...grpc.CallOption) (*GetProductHistoryInfoResponse, error)
+	// active 变化
 	AppendProductChanges(ctx context.Context, in *AppendProductChangesRequest, opts ...grpc.CallOption) (*AppendProductChangesResponse, error)
 	ListProductChanges(ctx context.Context, in *ListProductChangesRequest, opts ...grpc.CallOption) (*ListProductChangesResponse, error)
 	DeleteProductChanges(ctx context.Context, in *DeleteProductChangesRequest, opts ...grpc.CallOption) (*DeleteProductChangesResponse, error)
-	// 获取详情；TODO: 获取某个字段的连续变动信息
-	GetAmzProductLatestInfo(ctx context.Context, in *GetAmzProductLatestInfoRequest, opts ...grpc.CallOption) (*GetAmzProductLatestInfoResponse, error)
+	// inactive details
+	AppendInactiveProductChanges(ctx context.Context, in *AppendProductChangesRequest, opts ...grpc.CallOption) (*AppendProductChangesResponse, error)
+	ListInactiveProductChanges(ctx context.Context, in *ListProductChangesRequest, opts ...grpc.CallOption) (*ListProductChangesResponse, error)
+	DeleteInactiveProductChanges(ctx context.Context, in *DeleteProductChangesRequest, opts ...grpc.CallOption) (*DeleteProductChangesResponse, error)
 }
 
 type productServiceClient struct {
@@ -107,6 +116,15 @@ func (c *productServiceClient) AppendAmzProductActiveDetail(ctx context.Context,
 	return out, nil
 }
 
+func (c *productServiceClient) ListProductAmzDetals(ctx context.Context, in *ListAmzProductDetailsRequest, opts ...grpc.CallOption) (*ListAmzProductDetailsResponse, error) {
+	out := new(ListAmzProductDetailsResponse)
+	err := c.cc.Invoke(ctx, ProductService_ListProductAmzDetals_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productServiceClient) DeleteAmzProductActiveDetail(ctx context.Context, in *DeleteAmzProductActiveDetailRequest, opts ...grpc.CallOption) (*DeleteAmzProductActiveDetailResponse, error) {
 	out := new(DeleteAmzProductActiveDetailResponse)
 	err := c.cc.Invoke(ctx, ProductService_DeleteAmzProductActiveDetail_FullMethodName, in, out, opts...)
@@ -128,6 +146,15 @@ func (c *productServiceClient) AppendAmzProductInactiveDetail(ctx context.Contex
 func (c *productServiceClient) DeleteAmzProductInactiveDetail(ctx context.Context, in *DeleteAmzProductInactiveDetailRequest, opts ...grpc.CallOption) (*DeleteAmzProductInactiveDetailResponse, error) {
 	out := new(DeleteAmzProductInactiveDetailResponse)
 	err := c.cc.Invoke(ctx, ProductService_DeleteAmzProductInactiveDetail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetProductHistoryInfo(ctx context.Context, in *GetProductHistoryInfoRequest, opts ...grpc.CallOption) (*GetProductHistoryInfoResponse, error) {
+	out := new(GetProductHistoryInfoResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetProductHistoryInfo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -161,9 +188,27 @@ func (c *productServiceClient) DeleteProductChanges(ctx context.Context, in *Del
 	return out, nil
 }
 
-func (c *productServiceClient) GetAmzProductLatestInfo(ctx context.Context, in *GetAmzProductLatestInfoRequest, opts ...grpc.CallOption) (*GetAmzProductLatestInfoResponse, error) {
-	out := new(GetAmzProductLatestInfoResponse)
-	err := c.cc.Invoke(ctx, ProductService_GetAmzProductLatestInfo_FullMethodName, in, out, opts...)
+func (c *productServiceClient) AppendInactiveProductChanges(ctx context.Context, in *AppendProductChangesRequest, opts ...grpc.CallOption) (*AppendProductChangesResponse, error) {
+	out := new(AppendProductChangesResponse)
+	err := c.cc.Invoke(ctx, ProductService_AppendInactiveProductChanges_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) ListInactiveProductChanges(ctx context.Context, in *ListProductChangesRequest, opts ...grpc.CallOption) (*ListProductChangesResponse, error) {
+	out := new(ListProductChangesResponse)
+	err := c.cc.Invoke(ctx, ProductService_ListInactiveProductChanges_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) DeleteInactiveProductChanges(ctx context.Context, in *DeleteProductChangesRequest, opts ...grpc.CallOption) (*DeleteProductChangesResponse, error) {
+	out := new(DeleteProductChangesResponse)
+	err := c.cc.Invoke(ctx, ProductService_DeleteInactiveProductChanges_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -181,14 +226,19 @@ type ProductServiceServer interface {
 	DeleteProduct(context.Context, *DeleteProductRequest) (*DeleteProductResponse, error)
 	// TODO: append multiple
 	AppendAmzProductActiveDetail(context.Context, *AppendAmzProductActiveDetailRequest) (*AppendAmzProductActiveDetailResponse, error)
+	ListProductAmzDetals(context.Context, *ListAmzProductDetailsRequest) (*ListAmzProductDetailsResponse, error)
 	DeleteAmzProductActiveDetail(context.Context, *DeleteAmzProductActiveDetailRequest) (*DeleteAmzProductActiveDetailResponse, error)
 	AppendAmzProductInactiveDetail(context.Context, *AppendAmzProductInactiveDetailRequest) (*AppendAmzProductInactiveDetailResponse, error)
 	DeleteAmzProductInactiveDetail(context.Context, *DeleteAmzProductInactiveDetailRequest) (*DeleteAmzProductInactiveDetailResponse, error)
+	GetProductHistoryInfo(context.Context, *GetProductHistoryInfoRequest) (*GetProductHistoryInfoResponse, error)
+	// active 变化
 	AppendProductChanges(context.Context, *AppendProductChangesRequest) (*AppendProductChangesResponse, error)
 	ListProductChanges(context.Context, *ListProductChangesRequest) (*ListProductChangesResponse, error)
 	DeleteProductChanges(context.Context, *DeleteProductChangesRequest) (*DeleteProductChangesResponse, error)
-	// 获取详情；TODO: 获取某个字段的连续变动信息
-	GetAmzProductLatestInfo(context.Context, *GetAmzProductLatestInfoRequest) (*GetAmzProductLatestInfoResponse, error)
+	// inactive details
+	AppendInactiveProductChanges(context.Context, *AppendProductChangesRequest) (*AppendProductChangesResponse, error)
+	ListInactiveProductChanges(context.Context, *ListProductChangesRequest) (*ListProductChangesResponse, error)
+	DeleteInactiveProductChanges(context.Context, *DeleteProductChangesRequest) (*DeleteProductChangesResponse, error)
 	mustEmbedUnimplementedProductServiceServer()
 }
 
@@ -211,6 +261,9 @@ func (UnimplementedProductServiceServer) DeleteProduct(context.Context, *DeleteP
 func (UnimplementedProductServiceServer) AppendAmzProductActiveDetail(context.Context, *AppendAmzProductActiveDetailRequest) (*AppendAmzProductActiveDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppendAmzProductActiveDetail not implemented")
 }
+func (UnimplementedProductServiceServer) ListProductAmzDetals(context.Context, *ListAmzProductDetailsRequest) (*ListAmzProductDetailsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListProductAmzDetals not implemented")
+}
 func (UnimplementedProductServiceServer) DeleteAmzProductActiveDetail(context.Context, *DeleteAmzProductActiveDetailRequest) (*DeleteAmzProductActiveDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAmzProductActiveDetail not implemented")
 }
@@ -219,6 +272,9 @@ func (UnimplementedProductServiceServer) AppendAmzProductInactiveDetail(context.
 }
 func (UnimplementedProductServiceServer) DeleteAmzProductInactiveDetail(context.Context, *DeleteAmzProductInactiveDetailRequest) (*DeleteAmzProductInactiveDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAmzProductInactiveDetail not implemented")
+}
+func (UnimplementedProductServiceServer) GetProductHistoryInfo(context.Context, *GetProductHistoryInfoRequest) (*GetProductHistoryInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProductHistoryInfo not implemented")
 }
 func (UnimplementedProductServiceServer) AppendProductChanges(context.Context, *AppendProductChangesRequest) (*AppendProductChangesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppendProductChanges not implemented")
@@ -229,8 +285,14 @@ func (UnimplementedProductServiceServer) ListProductChanges(context.Context, *Li
 func (UnimplementedProductServiceServer) DeleteProductChanges(context.Context, *DeleteProductChangesRequest) (*DeleteProductChangesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteProductChanges not implemented")
 }
-func (UnimplementedProductServiceServer) GetAmzProductLatestInfo(context.Context, *GetAmzProductLatestInfoRequest) (*GetAmzProductLatestInfoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAmzProductLatestInfo not implemented")
+func (UnimplementedProductServiceServer) AppendInactiveProductChanges(context.Context, *AppendProductChangesRequest) (*AppendProductChangesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AppendInactiveProductChanges not implemented")
+}
+func (UnimplementedProductServiceServer) ListInactiveProductChanges(context.Context, *ListProductChangesRequest) (*ListProductChangesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInactiveProductChanges not implemented")
+}
+func (UnimplementedProductServiceServer) DeleteInactiveProductChanges(context.Context, *DeleteProductChangesRequest) (*DeleteProductChangesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteInactiveProductChanges not implemented")
 }
 func (UnimplementedProductServiceServer) mustEmbedUnimplementedProductServiceServer() {}
 
@@ -335,6 +397,24 @@ func _ProductService_AppendAmzProductActiveDetail_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductService_ListProductAmzDetals_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAmzProductDetailsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).ListProductAmzDetals(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_ListProductAmzDetals_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).ListProductAmzDetals(ctx, req.(*ListAmzProductDetailsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductService_DeleteAmzProductActiveDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteAmzProductActiveDetailRequest)
 	if err := dec(in); err != nil {
@@ -385,6 +465,24 @@ func _ProductService_DeleteAmzProductInactiveDetail_Handler(srv interface{}, ctx
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProductServiceServer).DeleteAmzProductInactiveDetail(ctx, req.(*DeleteAmzProductInactiveDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetProductHistoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProductHistoryInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetProductHistoryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetProductHistoryInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetProductHistoryInfo(ctx, req.(*GetProductHistoryInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -443,20 +541,56 @@ func _ProductService_DeleteProductChanges_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProductService_GetAmzProductLatestInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAmzProductLatestInfoRequest)
+func _ProductService_AppendInactiveProductChanges_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AppendProductChangesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProductServiceServer).GetAmzProductLatestInfo(ctx, in)
+		return srv.(ProductServiceServer).AppendInactiveProductChanges(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ProductService_GetAmzProductLatestInfo_FullMethodName,
+		FullMethod: ProductService_AppendInactiveProductChanges_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).GetAmzProductLatestInfo(ctx, req.(*GetAmzProductLatestInfoRequest))
+		return srv.(ProductServiceServer).AppendInactiveProductChanges(ctx, req.(*AppendProductChangesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_ListInactiveProductChanges_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListProductChangesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).ListInactiveProductChanges(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_ListInactiveProductChanges_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).ListInactiveProductChanges(ctx, req.(*ListProductChangesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_DeleteInactiveProductChanges_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteProductChangesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).DeleteInactiveProductChanges(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_DeleteInactiveProductChanges_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).DeleteInactiveProductChanges(ctx, req.(*DeleteProductChangesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -489,6 +623,10 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProductService_AppendAmzProductActiveDetail_Handler,
 		},
 		{
+			MethodName: "ListProductAmzDetals",
+			Handler:    _ProductService_ListProductAmzDetals_Handler,
+		},
+		{
 			MethodName: "DeleteAmzProductActiveDetail",
 			Handler:    _ProductService_DeleteAmzProductActiveDetail_Handler,
 		},
@@ -499,6 +637,10 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteAmzProductInactiveDetail",
 			Handler:    _ProductService_DeleteAmzProductInactiveDetail_Handler,
+		},
+		{
+			MethodName: "GetProductHistoryInfo",
+			Handler:    _ProductService_GetProductHistoryInfo_Handler,
 		},
 		{
 			MethodName: "AppendProductChanges",
@@ -513,8 +655,16 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProductService_DeleteProductChanges_Handler,
 		},
 		{
-			MethodName: "GetAmzProductLatestInfo",
-			Handler:    _ProductService_GetAmzProductLatestInfo_Handler,
+			MethodName: "AppendInactiveProductChanges",
+			Handler:    _ProductService_AppendInactiveProductChanges_Handler,
+		},
+		{
+			MethodName: "ListInactiveProductChanges",
+			Handler:    _ProductService_ListInactiveProductChanges_Handler,
+		},
+		{
+			MethodName: "DeleteInactiveProductChanges",
+			Handler:    _ProductService_DeleteInactiveProductChanges_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

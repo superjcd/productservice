@@ -81,5 +81,5 @@ func (p *products) Update(ctx context.Context, rq *v1.UpdateProductRequest) erro
 }
 
 func (p *products) Delete(ctx context.Context, rq *v1.DeleteProductRequest) error {
-	return p.db.Where("asin = ? and sku = ? ", rq.Asin, rq.Sku).Delete(&store.Product{}).Error
+	return p.db.Unscoped().Where("asin = ? and sku = ? ", rq.Asin, rq.Sku).Delete(&store.Product{}).Error
 }

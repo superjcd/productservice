@@ -20,6 +20,14 @@ func (ds *datastore) ProductDetails() store.ProductDetailsStore {
 	return &product_details{db: ds.db}
 }
 
+func (ds *datastore) ProductChanges() store.ProductChangeStore {
+	return &product_changes{db: ds.db}
+}
+
+func (ds *datastore) InactiveProductChanges() store.InactiveProductChangeStore {
+	return &inactive_product_changes{db: ds.db}
+}
+
 var (
 	sqlFactory store.Factory
 	once       sync.Once

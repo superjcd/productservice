@@ -9,6 +9,8 @@ import (
 type Factory interface {
 	Products() ProductStore
 	ProductDetails() ProductDetailsStore
+	ProductChanges() ProductChangeStore
+	InactiveProductChanges() InactiveProductChangeStore
 	Close() error
 }
 
@@ -20,9 +22,22 @@ type ProductStore interface {
 }
 
 type ProductDetailsStore interface {
-	GetlatestInfo(ctx context.Context, _ *v1.GetAmzProductLatestInfoRequest) (*ProductLatestInfo, error)
 	AppendActiveDetail(ctx context.Context, _ *v1.AppendAmzProductActiveDetailRequest) error
+	ListActiveDetails(ctx context.Context, _ *v1.ListAmzProductDetailsRequest) (*ProductDetails, error)
 	DeleteActiveDetail(ctx context.Context, _ *v1.DeleteAmzProductActiveDetailRequest) error
 	AppendInactiveDetail(ctx context.Context, _ *v1.AppendAmzProductInactiveDetailRequest) error
 	DeleteInactiveDetail(ctx context.Context, _ *v1.DeleteAmzProductInactiveDetailRequest) error
+	GetProductHistoryInfo(ctx context.Context, _ *v1.GetProductHistoryInfoRequest) ([]ProductHistoryInfoRecord, error)
+}
+
+type ProductChangeStore interface {
+	Append(ctx context.Context, _ *v1.AppendProductChangesRequest) error
+	List(ctx context.Context, _ *v1.ListProductChangesRequest) (*ProductChangeList, error)
+	Delete(ctx context.Context, _ *v1.DeleteProductChangesRequest) error
+}
+
+type InactiveProductChangeStore interface {
+	Append(ctx context.Context, _ *v1.AppendProductChangesRequest) error
+	List(ctx context.Context, _ *v1.ListProductChangesRequest) (*InactiveProductChangeList, error)
+	Delete(ctx context.Context, _ *v1.DeleteProductChangesRequest) error
 }
